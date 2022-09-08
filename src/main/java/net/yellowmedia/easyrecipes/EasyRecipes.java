@@ -34,6 +34,8 @@ public final class EasyRecipes extends JavaPlugin {
     public static final Logger LOGGER = Logger.getLogger("Minecraft");
     public static final String MSG_PREFIX = "&e[&aEasyRecipes&e] ";
 
+    public static List<ShapedRecipe> recipe_shapes = new ArrayList<>();
+
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -56,7 +58,6 @@ public final class EasyRecipes extends JavaPlugin {
         File file = new File(getDataFolder(), name);
         if (!file.exists()) {
             try {
-                LOGGER.info(file.getAbsolutePath());
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -119,7 +120,8 @@ public final class EasyRecipes extends JavaPlugin {
                 recipe.setIngredient(Integer.toString(j).charAt(0), ingredients_list.get(j));
             }
             getServer().addRecipe(recipe);
-            LOGGER.info("Registered recipe " + i);
+            recipe_shapes.add(recipe);
+            LOGGER.info("Registered recipe for " + result_meta.getDisplayName());
         }
         return true;
     }
