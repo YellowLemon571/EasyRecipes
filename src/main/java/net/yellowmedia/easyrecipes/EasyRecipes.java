@@ -34,7 +34,7 @@ public final class EasyRecipes extends JavaPlugin {
     public static final Logger LOGGER = Logger.getLogger("Minecraft");
     public static final String MSG_PREFIX = "&e[&aEasyRecipes&e] ";
 
-    public static List<ShapedRecipe> recipe_shapes = new ArrayList<>();
+    public static List<NamespacedKey> recipe_keys = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -120,7 +120,7 @@ public final class EasyRecipes extends JavaPlugin {
                 recipe.setIngredient(Integer.toString(j).charAt(0), ingredients_list.get(j));
             }
             getServer().addRecipe(recipe);
-            recipe_shapes.add(recipe);
+            recipe_keys.add(recipe_key);
             LOGGER.info("Registered recipe for " + result_meta.getDisplayName());
         }
         return true;

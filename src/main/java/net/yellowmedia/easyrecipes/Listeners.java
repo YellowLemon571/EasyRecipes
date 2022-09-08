@@ -4,10 +4,12 @@ import net.yellowmedia.easyrecipes.command.CreateRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -73,6 +75,24 @@ public class Listeners implements Listener {
 
             // Check if recipe is correct then process it, this is some freaky stuff
             if (!ingredientsEmpty && !resultEmpty) {
+                // Create the ShapedRecipe before saving it to config to check for duplicates
+                ItemMeta result_meta = result.getItemMeta();
+                if (result_meta == null) {
+                    EasyRecipes.LOGGER.warning("Result metadata is null");
+                    return;
+                }
+                NamespacedKey key = new NamespacedKey(plugin, "er_" + result_meta.getDisplayName().toLowerCase().replaceAll("[^a-zA-Z]+", ""));
+                ShapedRecipe shape = new ShapedRecipe(key, result);
+                shape.shape("012", "345", "678");
+                for (int i = 0; i < 9; i++) {
+                    shape.setIngredient(Integer.toString(i).charAt(0), new RecipeChoice.ExactChoice(ingredients_list.get(i)));
+                }
+
+                if (EasyRecipes.recipe_keys.contains(key)) {
+                    EasyRecipes.message(player, "&4This recipe already exists!");
+                    return;
+                }
+
                 // Load recipe file, create new config stuff if empty
                 File file = easyRecipes.getFileConfig("recipes.yml");
                 if (file == null) {
@@ -118,20 +138,10 @@ public class Listeners implements Listener {
                 recipe.set("result", result_base64);
 
                 // Apply the recipe to the server
-                ItemMeta result_meta = result.getItemMeta();
-                if (result_meta == null) {
-                    EasyRecipes.LOGGER.warning("Result metadata is null");
-                    return;
-                }
-                NamespacedKey key = new NamespacedKey(plugin, "er_" + result_meta.getDisplayName().toLowerCase().replaceAll("[^a-zA-Z]+", ""));
-                ShapedRecipe shape = new ShapedRecipe(key, result);
-                shape.shape("012", "345", "678");
-                for (int i = 0; i < 9; i++) {
-                    shape.setIngredient(Integer.toString(i).charAt(0), new RecipeChoice.ExactChoice(ingredients_list.get(i)));
-                }
                 boolean recipeAdded = plugin.getServer().addRecipe(shape);
                 if (recipeAdded) {
-                    EasyRecipes.message(player, "&aDone! Try the recipe.");
+                    EasyRecipes.message(player, "&aRecipe has been successfully created!");
+                    player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, (float) 1.0, (float) 1.0);
                 } else {
                     EasyRecipes.message(player, "&4Something went wrong.");
                 }
