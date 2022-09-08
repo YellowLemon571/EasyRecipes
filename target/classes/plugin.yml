@@ -6,7 +6,8 @@ authors: [ Yellow571 ]
 description: Allows for the creation of both vanilla items and special plugin-created items
 
 commands:
-  createrecipe:
-    description: Creates a custom recipe
-    usage: /createrecipe
+  easyrecipes:
+    description: Master command for EasyRecipes
+    usage: /easyrecipes
+    aliases: [er]
     default: op

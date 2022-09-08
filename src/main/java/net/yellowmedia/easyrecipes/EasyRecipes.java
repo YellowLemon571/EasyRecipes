@@ -1,7 +1,6 @@
 package net.yellowmedia.easyrecipes;
 
-import net.yellowmedia.easyrecipes.command.CreateRecipe;
-import org.bukkit.Bukkit;
+import net.yellowmedia.easyrecipes.command.MasterCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -19,14 +18,12 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import javax.naming.Name;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public final class EasyRecipes extends JavaPlugin {
@@ -39,7 +36,7 @@ public final class EasyRecipes extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        getCommand("createrecipe").setExecutor(new CreateRecipe());
+        getCommand("easyrecipes").setExecutor(new MasterCommand(this));
         getServer().getPluginManager().registerEvents(new Listeners(this), this);
         loadRecipes();
         LOGGER.info("Enabled EasyRecipes v" + getDescription().getVersion());
@@ -113,7 +110,7 @@ public final class EasyRecipes extends JavaPlugin {
             if (result_meta == null) continue;
 
             // Finally create the recipe
-            NamespacedKey recipe_key = new NamespacedKey(this, "er_" + result_meta.getDisplayName().toLowerCase().replaceAll("[^a-zA-Z]+", ""));
+            NamespacedKey recipe_key = new NamespacedKey(this, "er_" + stripColorCode(result_meta.getDisplayName().toLowerCase()).replace(" ", "_").replaceAll("[^a-zA-Z_\\-]+", ""));
             ShapedRecipe recipe = new ShapedRecipe(recipe_key, result_item);
             recipe.shape("012", "345", "678");
             for (int j = 0; j < 9; j++) {
@@ -121,16 +118,22 @@ public final class EasyRecipes extends JavaPlugin {
             }
             getServer().addRecipe(recipe);
             recipe_keys.add(recipe_key);
-            LOGGER.info("Registered recipe for " + result_meta.getDisplayName());
+            LOGGER.info("Registered recipe " + recipe_key.getKey());
         }
         return true;
     }
 
-    public static void message(Player player, String message) {
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', MSG_PREFIX + message));
+    public static String stripColorCode(String s) {
+        return s.replaceAll("&.|§.", "");
     }
+
     public static void message(CommandSender sender, String message) {
-        sender.sendMessage(MSG_PREFIX.replace("&", "") + message);
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MSG_PREFIX + message));
+        } else {
+            sender.sendMessage(stripColorCode(MSG_PREFIX + message));
+        }
     }
 
     public static String itemToBase64(ItemStack item) throws IllegalStateException {

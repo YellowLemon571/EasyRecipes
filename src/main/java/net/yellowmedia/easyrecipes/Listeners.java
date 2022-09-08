@@ -1,15 +1,12 @@
 package net.yellowmedia.easyrecipes;
 
-import net.yellowmedia.easyrecipes.command.CreateRecipe;
-import org.bukkit.Bukkit;
+import net.yellowmedia.easyrecipes.command.MasterCommand;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,17 +37,17 @@ public class Listeners implements Listener {
         Inventory inv = event.getInventory();
 
         // Data checks
-        if (!view.getTitle().equals(CreateRecipe.RECIPEMENU_NAME)) return;
-        if (CreateRecipe.CRAFTING_SLOTS.contains(event.getRawSlot()) || event.getRawSlot() == CreateRecipe.RESULT_SLOT || event.getRawSlot() > 26) return;
+        if (!view.getTitle().equals(MasterCommand.RECIPEMENU_NAME)) return;
+        if (MasterCommand.CRAFTING_SLOTS.contains(event.getRawSlot()) || event.getRawSlot() == MasterCommand.RESULT_SLOT || event.getRawSlot() > 26) return;
 
         event.setCancelled(true);
 
         // Create button
-        if (event.getSlot() == CreateRecipe.CREATE_SLOT) {
+        if (event.getSlot() == MasterCommand.CREATE_SLOT) {
             boolean ingredientsEmpty = true, resultEmpty = true;
             // Scan the ingredient table and give ingredients back to player
             List<ItemStack> ingredients_list = new ArrayList<>();
-            for (int i : CreateRecipe.CRAFTING_SLOTS) {
+            for (int i : MasterCommand.CRAFTING_SLOTS) {
                 ItemStack item = inv.getItem(i);
                 if (item != null && !item.getType().equals(Material.AIR)) {
                     ingredients_list.add(item);
@@ -66,7 +63,7 @@ public class Listeners implements Listener {
                 }
             }
             // Scan the result and give result back to player
-            ItemStack result = inv.getItem(CreateRecipe.RESULT_SLOT);
+            ItemStack result = inv.getItem(MasterCommand.RESULT_SLOT);
             if (result != null && !result.getType().equals(Material.AIR)) {
                 resultEmpty = false;
                 player.getInventory().addItem(result);
@@ -81,7 +78,7 @@ public class Listeners implements Listener {
                     EasyRecipes.LOGGER.warning("Result metadata is null");
                     return;
                 }
-                NamespacedKey key = new NamespacedKey(plugin, "er_" + result_meta.getDisplayName().toLowerCase().replaceAll("[^a-zA-Z]+", ""));
+                NamespacedKey key = new NamespacedKey(plugin, "er_" + EasyRecipes.stripColorCode(result_meta.getDisplayName().toLowerCase()).replace(" ", "_").replaceAll("[^a-zA-Z_\\-]+", ""));
                 ShapedRecipe shape = new ShapedRecipe(key, result);
                 shape.shape("012", "345", "678");
                 for (int i = 0; i < 9; i++) {
