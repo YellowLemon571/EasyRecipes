@@ -86,13 +86,17 @@ public final class EasyRecipes extends JavaPlugin {
             // Iterate through ingredients and convert to ItemStacks, this is some freaky stuff
             List<RecipeChoice.ExactChoice> ingredients_list = new ArrayList<>();
             for (String ingredient_base64 : ingredients) {
-                try {
-                    ItemStack ingredient = base64ToItem(ingredient_base64);
-                    if (ingredient == null) continue ingredient_loop;
-                    RecipeChoice.ExactChoice ingredient_choice = new RecipeChoice.ExactChoice(ingredient);
-                    ingredients_list.add(ingredient_choice);
-                } catch (IOException e) {
-                    continue ingredient_loop;
+                if (ingredient_base64.equals("AIR")) {
+                    ingredients_list.add(new RecipeChoice.ExactChoice(new ItemStack(Material.AIR)));
+                } else {
+                    try {
+                        ItemStack ingredient = base64ToItem(ingredient_base64);
+                        if (ingredient == null) continue ingredient_loop;
+                        RecipeChoice.ExactChoice ingredient_choice = new RecipeChoice.ExactChoice(ingredient);
+                        ingredients_list.add(ingredient_choice);
+                    } catch (IOException e) {
+                        continue ingredient_loop;
+                    }
                 }
             }
 
@@ -110,7 +114,12 @@ public final class EasyRecipes extends JavaPlugin {
             if (result_meta == null) continue;
 
             // Finally create the recipe
-            NamespacedKey recipe_key = new NamespacedKey(this, "er_" + stripColorCode(result_meta.getDisplayName().toLowerCase()).replace(" ", "_").replaceAll("[^a-zA-Z_\\-]+", ""));
+            String keyName = EasyRecipes.stripColorCode(result_meta.getDisplayName().toLowerCase()).replace(" ", "_").replaceAll("[^a-zA-Z_\\-]+", "");
+            if (keyName.equals("")) {
+                EasyRecipes.LOGGER.warning("Result has no display name, using material name instead");
+                keyName = result_item.getType().name().toLowerCase();
+            }
+            NamespacedKey recipe_key = new NamespacedKey(this, "er_" + keyName);
             ShapedRecipe recipe = new ShapedRecipe(recipe_key, result_item);
             recipe.shape("012", "345", "678");
             for (int j = 0; j < 9; j++) {

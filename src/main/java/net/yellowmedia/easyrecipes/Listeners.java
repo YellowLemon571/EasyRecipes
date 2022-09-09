@@ -78,7 +78,12 @@ public class Listeners implements Listener {
                     EasyRecipes.LOGGER.warning("Result metadata is null");
                     return;
                 }
-                NamespacedKey key = new NamespacedKey(plugin, "er_" + EasyRecipes.stripColorCode(result_meta.getDisplayName().toLowerCase()).replace(" ", "_").replaceAll("[^a-zA-Z_\\-]+", ""));
+                String keyName = EasyRecipes.stripColorCode(result_meta.getDisplayName().toLowerCase()).replace(" ", "_").replaceAll("[^a-zA-Z_\\-]+", "");
+                if (keyName.equals("")) {
+                    EasyRecipes.LOGGER.warning("Result has no display name, using material name instead");
+                    keyName = result.getType().name().toLowerCase();
+                }
+                NamespacedKey key = new NamespacedKey(plugin, "er_" + keyName);
                 ShapedRecipe shape = new ShapedRecipe(key, result);
                 shape.shape("012", "345", "678");
                 for (int i = 0; i < 9; i++) {
@@ -108,12 +113,16 @@ public class Listeners implements Listener {
                 // Convert ingredients to base64 and save to file
                 List<String> ingredients_list_base64 = new ArrayList<>();
                 for (ItemStack item_entry : ingredients_list) {
-                    try {
-                        String item_base64 = EasyRecipes.itemToBase64(item_entry);
-                        ingredients_list_base64.add(item_base64);
-                    } catch (IllegalStateException e) {
-                        e.printStackTrace();
-                        return;
+                    if (item_entry.getType().equals(Material.AIR)) {
+                        ingredients_list_base64.add("AIR");
+                    } else {
+                        try {
+                            String item_base64 = EasyRecipes.itemToBase64(item_entry);
+                            ingredients_list_base64.add(item_base64);
+                        } catch (IllegalStateException e) {
+                            e.printStackTrace();
+                            return;
+                        }
                     }
                 }
                 if (ingredients_list_base64.size() != 9) {
