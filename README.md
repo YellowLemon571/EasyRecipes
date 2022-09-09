@@ -1,7 +1,18 @@
 # EasyRecipes
 Easily make custom crafting recipes. Supports custom items as both the ingredients and the result!
 
-`/createrecipe` is currently the only command. It opens a menu for you to shape your recipe and insert the resulting item. All items placed in the menu will be returned and hopefully the recipe is added without issue.
-Recipes are stored in a file using Base64 encoding and recipes should load at server startup just fine. Good luck editing it yourself.
+## Sub-commands
+*The master command for EasyRecipes is `/easyrecipes` or `/er`.*
+- `create` - Opens a menu for the user to place ingredients and a result for a custom recipe.
+- `delete <recipe name>` - Deletes a custom recipe.
+- `list` - Shows a list of the current custom recipes loaded by the plugin. Use the names from this command for the `delete` sub-command.
 
-WARNING - THIS PLUGIN IS CURRENTLY A PROTOTYPE. I WILL NOT PROVIDE SUPPORT UNTIL I MAKE A FULL RELEASE VERSION.
+## Permissions
+- `easyrecipes.*` - Wildcard permission for EasyRecipes. Includes the below permissions.
+- `easyrecipes.create` - Allows for the creation of custom recipes.
+- `easyrecipes.delete` - Allows for the deletion of custom recipes.
+- `easyrecipes.list` - Allows for the viewing of current custom recipes.
+
+## Warnings
+- DO NOT edit the `recipes.yml` file! Doing so can potentially break the entire plugin!
+- This plugin is currently a prototype. I will NOT provide support until I release a stable version.
