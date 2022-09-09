@@ -101,11 +101,9 @@ public class Listeners implements Listener {
                 if (recipes_section == null) {
                     recipes_section = recipes.createSection("recipes");
                 }
-                int recipes_length = recipes_section.getInt("length");
 
-                // Increase index and create section for this recipe
-                recipes_section.set("length", recipes_length + 1);
-                ConfigurationSection recipe = recipes_section.createSection(Integer.toString(recipes_length));
+                // Create section for new recipe
+                ConfigurationSection recipe = recipes_section.createSection(key.getKey());
 
                 // Convert ingredients to base64 and save to file
                 List<String> ingredients_list_base64 = new ArrayList<>();

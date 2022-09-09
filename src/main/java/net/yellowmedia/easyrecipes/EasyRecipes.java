@@ -73,12 +73,10 @@ public final class EasyRecipes extends JavaPlugin {
         FileConfiguration recipe_config = YamlConfiguration.loadConfiguration(file);
         ConfigurationSection recipe_section = recipe_config.getConfigurationSection("recipes");
         if (recipe_section == null) return false;
-        int length = recipe_section.getInt("length");
-        if (length < 0) return false;
         // Iterate through every recipe, skip each recipe deemed invalid by the crazy amount of sanity checks
         ingredient_loop:
-        for (int i = 0; i < length; i++) {
-            ConfigurationSection section = recipe_section.getConfigurationSection(Integer.toString(i));
+        for (String section_key : recipe_section.getKeys(false)) {
+            ConfigurationSection section = recipe_section.getConfigurationSection(section_key);
             if (section == null) continue;
             List<String> ingredients = section.getStringList("ingredients");
             if (ingredients.size() != 9) continue;

@@ -124,13 +124,7 @@ public class MasterCommand implements CommandExecutor {
                 EasyRecipes.LOGGER.severe("recipes.yml is broken");
                 return true;
             }
-            int length = section.getInt("length");
-            if (length < 1) {
-                EasyRecipes.LOGGER.severe("Amount of recipes in recipes.yml is unexpectedly empty");
-                return true;
-            }
-            section.set("length", length - 1);
-            section.set(Integer.toString(length - 1), null);
+            section.set(key.getKey(), null);
             // Attempt to save the file
             try {
                 recipes.save(file);
