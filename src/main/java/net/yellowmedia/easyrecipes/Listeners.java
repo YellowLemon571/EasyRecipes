@@ -136,6 +136,7 @@ public class Listeners implements Listener {
                 boolean recipeAdded = plugin.getServer().addRecipe(shape);
                 if (recipeAdded) {
                     EasyRecipes.message(player, "&aRecipe has been successfully created!");
+                    EasyRecipes.recipe_keys.add(key);
                     player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, (float) 1.0, (float) 1.0);
                 } else {
                     EasyRecipes.message(player, "&4Something went wrong.");

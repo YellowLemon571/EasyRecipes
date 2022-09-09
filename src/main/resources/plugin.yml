@@ -11,3 +11,21 @@ commands:
     usage: /easyrecipes
     aliases: [er]
     default: op
+
+permissions:
+  easyrecipes.*:
+    description: Wildcard permission for EasyRecipes
+    default: op
+    children:
+      easyrecipes.create: true
+      easyrecipes.delete: true
+      easyrecipes.list: true
+  easyrecipes.create:
+    description: Allows for the creation of custom recipes
+    default: op
+  easyrecipes.delete:
+    description: Allows for the deleteion of custom recipes
+    default: op
+  easyrecipes:
+    description: Allows for current custom recipes to be viewed
+    default: op

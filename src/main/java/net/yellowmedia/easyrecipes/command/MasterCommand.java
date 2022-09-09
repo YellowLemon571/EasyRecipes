@@ -79,10 +79,16 @@ public class MasterCommand implements CommandExecutor {
 
         // Create command
         else if (args[0].equalsIgnoreCase("create")) {
+            // Check if sender has permission
+            if (!sender.hasPermission("easyrecipes.create")) {
+                EasyRecipes.message(sender, "&4You do not have permission!");
+                return true;
+            }
+
             // Check if sender is a player
             if (!(sender instanceof Player)) {
                 EasyRecipes.message(sender, "Only players are allowed to do this!");
-                return false;
+                return true;
             }
             Player player = (Player) sender;
 
@@ -94,6 +100,12 @@ public class MasterCommand implements CommandExecutor {
 
         // Delete command
         else if (args[0].equalsIgnoreCase("delete")) {
+            // Check if sender has permission
+            if (!sender.hasPermission("easyrecipes.delete")) {
+                EasyRecipes.message(sender, "&4You do not have permission!");
+                return true;
+            }
+
             // Check for bad argument count
             if (args.length != 2) {
                 EasyRecipes.message(sender, "&4Invalid arguments! Please specify &oonly &4the name of the recipe to delete.");
@@ -138,7 +150,13 @@ public class MasterCommand implements CommandExecutor {
 
         // List command
         else if (args[0].equalsIgnoreCase("list")) {
-            StringBuilder key_list = new StringBuilder().append("&aThe following recipes are loaded into the server:\n");
+            // Check if sender has permission
+            if (!sender.hasPermission("easyrecipes.list")) {
+                EasyRecipes.message(sender, "&4You do not have permission!");
+                return true;
+            }
+
+            StringBuilder key_list = new StringBuilder().append("&eThe following recipes are loaded into the server:\n");
             for (NamespacedKey key : EasyRecipes.recipe_keys) {
                 String key_str = key.getKey().substring(3);
                 key_list.append("&e- &f").append(key_str).append("\n");
