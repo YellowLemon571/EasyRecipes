@@ -1,5 +1,6 @@
-package net.yellowmedia.easyrecipes;
+package net.yellowmedia.easyrecipes.listener;
 
+import net.yellowmedia.easyrecipes.EasyRecipes;
 import net.yellowmedia.easyrecipes.command.MasterCommand;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -19,12 +20,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class Listeners implements Listener {
+public class InventoryListener implements Listener {
 
     private EasyRecipes easyRecipes;
     private Plugin plugin;
 
-    public Listeners(EasyRecipes easyRecipes) {
+    public InventoryListener(EasyRecipes easyRecipes) {
         this.easyRecipes = easyRecipes;
         this.plugin = easyRecipes;
     }

@@ -1,6 +1,8 @@
 package net.yellowmedia.easyrecipes;
 
 import net.yellowmedia.easyrecipes.command.MasterCommand;
+import net.yellowmedia.easyrecipes.listener.CraftingListener;
+import net.yellowmedia.easyrecipes.listener.InventoryListener;
 import net.yellowmedia.easyrecipes.tabcomplete.MasterTabCompleter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,7 +41,8 @@ public final class EasyRecipes extends JavaPlugin {
         // Plugin startup logic
         getCommand("easyrecipes").setExecutor(new MasterCommand(this));
         getCommand("easyrecipes").setTabCompleter(new MasterTabCompleter());
-        getServer().getPluginManager().registerEvents(new Listeners(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
+        getServer().getPluginManager().registerEvents(new CraftingListener(), this);
         loadRecipes();
         LOGGER.info("Enabled EasyRecipes v" + getDescription().getVersion());
     }

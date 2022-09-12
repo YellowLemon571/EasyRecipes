@@ -20,12 +20,16 @@ permissions:
       easyrecipes.create: true
       easyrecipes.delete: true
       easyrecipes.list: true
+      easyrecipes.craft.*: true
   easyrecipes.create:
     description: Allows for the creation of custom recipes
     default: op
   easyrecipes.delete:
-    description: Allows for the deleteion of custom recipes
+    description: Allows for the deletion of custom recipes
     default: op
-  easyrecipes:
+  easyrecipes.list:
     description: Allows for current custom recipes to be viewed
     default: op
+  easyrecipes.craft.*:
+    description: Wildcard permission allowing for the crafting of all created recipes
+    default: true
