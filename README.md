@@ -13,6 +13,9 @@ Easily make custom crafting recipes. Supports custom items as both the ingredien
 - `easyrecipes.delete` - Allows for the deletion of custom recipes.
 - `easyrecipes.list` - Allows for the viewing of current custom recipes.
 
+- `easyrecipes.craft.*` - Wildcard permission allowing for the crafting of created recipes (enabled by default)
+- `easyrecipes.craft.<recipe name>` - Allows for the crafting of a specific recipe.
+
 ## Warnings
 - DO NOT edit the `recipes.yml` file! Doing so can potentially break the entire plugin!
 - This plugin is currently a prototype. I will NOT provide support until I release a stable version.
