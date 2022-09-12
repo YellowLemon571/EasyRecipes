@@ -18,8 +18,9 @@ public class CraftingListener implements Listener {
         if (!(recipe instanceof ShapedRecipe)) return;
         ShapedRecipe recipe_shaped = (ShapedRecipe) recipe;
         NamespacedKey key = recipe_shaped.getKey();
+        String keyName = key.getKey().substring(3);
         if (EasyRecipes.recipe_keys.contains(key)) {
-            if (!player.hasPermission("easyrecipes.craft." + key.getKey()) && !player.hasPermission("easyrecipes.craft.*")) {
+            if (!player.hasPermission("easyrecipes.craft." + keyName) && !player.hasPermission("easyrecipes.craft.*")) {
                 EasyRecipes.message(player, "&4You do not have permission to craft this item!");
                 event.setCancelled(true);
             }

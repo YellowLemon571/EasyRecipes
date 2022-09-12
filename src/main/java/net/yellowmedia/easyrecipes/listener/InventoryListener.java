@@ -109,7 +109,7 @@ public class InventoryListener implements Listener {
                 }
 
                 // Create section for new recipe
-                ConfigurationSection recipe = recipes_section.createSection(key.getKey());
+                ConfigurationSection recipe = recipes_section.createSection(keyName);
 
                 // Convert ingredients to base64 and save to file
                 List<String> ingredients_list_base64 = new ArrayList<>();
